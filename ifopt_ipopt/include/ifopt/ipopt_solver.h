@@ -57,6 +57,10 @@ public:
     */
   void Solve(Problem& nlp) override;
 
+  /** @brief  Re-solves the NLP by reusing existing IpoptAdapter.
+    */
+  void ReSolve();
+
   /** Set options for the IPOPT solver. A complete list can be found here:
     * https://www.coin-or.org/Ipopt/documentation/node40.html
     */

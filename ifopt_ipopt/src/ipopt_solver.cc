@@ -29,6 +29,10 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace ifopt {
 
+// Because ipopt_solver.h does not depend on IPOPT classes,
+// you cannot add this to the member variables of IpoptSolver.
+Ipopt::SmartPtr<Ipopt::TNLP> nlp_ptr_;
+
 IpoptSolver::IpoptSolver()
 {
   ipopt_app_ = std::make_shared<Ipopt::IpoptApplication>();
@@ -77,8 +81,21 @@ IpoptSolver::Solve (Problem& nlp)
   bool finite_diff = jac_type=="finite-difference-values";
 
   // convert the NLP problem to Ipopt
-  SmartPtr<TNLP> nlp_ptr = new IpoptAdapter(nlp,finite_diff);
-  status_ = ipopt_app_->OptimizeTNLP(nlp_ptr);
+  nlp_ptr_ = new IpoptAdapter(nlp,finite_diff);
+  status_ = ipopt_app_->OptimizeTNLP(nlp_ptr_);
+
+  if (status_ != Solve_Succeeded) {
+    std::string msg = "ERROR: Ipopt failed to find a solution. Return Code: " + std::to_string(status_) + "\n";
+    std::cerr << msg;
+  }
+}
+
+void
+IpoptSolver::ReSolve ()
+{
+  using namespace Ipopt;
+
+  status_ = ipopt_app_->ReOptimizeTNLP(nlp_ptr_);
 
   if (status_ != Solve_Succeeded) {
     std::string msg = "ERROR: Ipopt failed to find a solution. Return Code: " + std::to_string(status_) + "\n";

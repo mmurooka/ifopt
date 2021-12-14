@@ -33,6 +33,19 @@ if (BUILD_SNOPT)
   add_subdirectory(ifopt_snopt)
 endif()
 
+find_package(catkin REQUIRED)
+
+catkin_package(
+  CATKIN_DEPENDS
+  INCLUDE_DIRS
+  ifopt_core/include
+  ifopt_ipopt/include
+  # ifopt_snopt/include
+  LIBRARIES
+  ifopt_core
+  ifopt_ipopt
+  # ifopt_snopt
+  )
 
 ##################################################
 ## Install find scripts for find_package(ifopt) ##

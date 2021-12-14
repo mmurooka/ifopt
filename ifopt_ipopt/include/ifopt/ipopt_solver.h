@@ -68,6 +68,9 @@ public:
   void SetOption(const std::string& name, int value);
   void SetOption(const std::string& name, double value);
 
+  /** Get a string with the list of all options set by the user. */
+  void PrintUserOptions(std::string& list) const;
+
   /** @brief  Get the total wall clock time for the optimization, including function evaluations.
     */
   double GetTotalWallclockTime ();

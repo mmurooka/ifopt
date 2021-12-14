@@ -121,6 +121,11 @@ IpoptSolver::SetOption (const std::string& name, double value)
   ipopt_app_->Options()->SetNumericValue(name, value);
 }
 
+void IpoptSolver::PrintUserOptions(std::string& list) const
+{
+  ipopt_app_->Options()->PrintUserOptions(list);
+}
+
 double
 IpoptSolver::GetTotalWallclockTime ()
 {

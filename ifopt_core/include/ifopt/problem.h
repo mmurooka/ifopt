@@ -217,31 +217,9 @@ public:
   Jacobian GetJacobianOfCosts () const;
 
   /**
-   * @brief Saves the current values of the optimization variables in x_prev.
-   *
-   * This is used to keep a history of the values for each NLP iterations.
-   */
-  void SaveCurrent();
-
-  /**
    * @brief Read/write access to the current optimization variables.
    */
   Composite::Ptr GetOptVariables() const;
-
-  /**
-   * @brief Sets the optimization variables to those at iteration iter.
-   */
-  void SetOptVariables(int iter);
-
-  /**
-   * @brief Sets the optimization variables to those of the final iteration.
-   */
-  void SetOptVariablesFinal();
-
-  /**
-   * @brief The number of iterations it took to solve the problem.
-   */
-  int GetIterationCount() const { return x_prev.size(); };
 
   /**
    * @brief Prints the variables, costs and constraints.
@@ -264,8 +242,6 @@ private:
   Composite::Ptr variables_;
   Composite constraints_;
   Composite costs_;
-
-  std::vector<VectorXd> x_prev; ///< the pure variables for every iteration.
 
   VectorXd ConvertToEigen(const double* x) const;
 };

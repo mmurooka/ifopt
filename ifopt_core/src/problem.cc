@@ -170,28 +170,10 @@ Problem::GetJacobianOfCosts () const
   return costs_.GetJacobian();
 }
 
-void
-Problem::SaveCurrent()
-{
-  x_prev.push_back(variables_->GetValues());
-}
-
 Composite::Ptr
 Problem::GetOptVariables () const
 {
   return variables_;
-}
-
-void
-Problem::SetOptVariables (int iter)
-{
-  variables_->SetVariables(x_prev.at(iter));
-}
-
-void
-Problem::SetOptVariablesFinal ()
-{
-  variables_->SetVariables(x_prev.at(GetIterationCount()-1));
 }
 
 void

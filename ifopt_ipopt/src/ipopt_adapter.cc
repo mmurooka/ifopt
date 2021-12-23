@@ -156,7 +156,6 @@ bool IpoptAdapter::intermediate_callback(AlgorithmMode mode,
                                          const IpoptData* ip_data,
                                          IpoptCalculatedQuantities* ip_cq)
 {
-  nlp_->SaveCurrent();
   return true;
 }
 
@@ -168,7 +167,6 @@ void IpoptAdapter::finalize_solution(SolverReturn status,
                                      IpoptCalculatedQuantities* ip_cq)
 {
   nlp_->SetVariables(x);
-  nlp_->SaveCurrent();
 }
 
 } // namespace Ipopt

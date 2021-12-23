@@ -121,6 +121,16 @@ private:
                                  double obj_value,
                                  const IpoptData* ip_data,
                                  IpoptCalculatedQuantities* ip_cq);
+
+  /** Optimization result to be used for warm start. */
+  struct OptimizationResult
+  {
+    bool initialized = false;
+    VectorXd x;
+    VectorXd z_L;
+    VectorXd z_U;
+    VectorXd lambda;
+  } opt_result_;
 };
 
 } // namespace Ipopt

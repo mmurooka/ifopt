@@ -77,13 +77,28 @@ bool IpoptAdapter::get_starting_point(Index n, bool init_x, double* x,
                                       Index m, bool init_lambda,
                                       double* lambda)
 {
-  // Here, we assume we only have starting values for x
-  assert(init_x == true);
-  assert(init_z == false);
-  assert(init_lambda == false);
-
-  VectorXd x_all = nlp_->GetVariableValues();
-  Eigen::Map<VectorXd>(&x[0], x_all.rows()) = x_all;
+  if (opt_result_.initialized) {
+    if (init_x) {
+      assert(opt_result_.x.size() == n);
+      Eigen::Map<VectorXd>(&x[0], n) = opt_result_.x;
+    }
+    if (init_z) {
+      assert(opt_result_.z_L.size() == n);
+      assert(opt_result_.z_U.size() == n);
+      Eigen::Map<VectorXd>(&z_L[0], n) = opt_result_.z_L;
+      Eigen::Map<VectorXd>(&z_U[0], n) = opt_result_.z_U;
+    }
+    if (init_lambda) {
+      assert(opt_result_.lambda.size() == m);
+      Eigen::Map<VectorXd>(&lambda[0], m) = opt_result_.lambda;
+    }
+  } else {
+    if (init_x) {
+      VectorXd x_all = nlp_->GetVariableValues();
+      Eigen::Map<VectorXd>(&x[0], x_all.rows()) = x_all;
+    }
+    assert(!init_z && !init_lambda);
+  }
 
   return true;
 }
@@ -167,6 +182,12 @@ void IpoptAdapter::finalize_solution(SolverReturn status,
                                      IpoptCalculatedQuantities* ip_cq)
 {
   nlp_->SetVariables(x);
+
+  opt_result_.initialized = true;
+  opt_result_.x = Eigen::Map<const Eigen::VectorXd>(x, n);
+  opt_result_.z_L = Eigen::Map<const Eigen::VectorXd>(z_L, n);
+  opt_result_.z_U = Eigen::Map<const Eigen::VectorXd>(z_U, n);
+  opt_result_.lambda = Eigen::Map<const Eigen::VectorXd>(lambda, m);
 }
 
 } // namespace Ipopt

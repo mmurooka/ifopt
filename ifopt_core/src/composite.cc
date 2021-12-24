@@ -58,6 +58,13 @@ Component::GetName () const
   return name_;
 }
 
+void
+Component::SetName (const std::string& name)
+{
+  name_ = name;
+}
+
+
 void Component::Print (double tol, int& index) const
 {
   // calculate squared bound violation

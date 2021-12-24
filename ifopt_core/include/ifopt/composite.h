@@ -140,6 +140,12 @@ public:
    * delay this by using @c kSpecifyLater if you have good reason.
    */
   void SetRows(int num_rows);
+
+  /**
+   * @brief Sets the name (id) of this component.
+   */
+  void SetName(const std::string& name);
+
   static const int kSpecifyLater = -1;
 
 private:

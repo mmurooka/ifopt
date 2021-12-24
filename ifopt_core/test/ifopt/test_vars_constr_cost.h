@@ -133,13 +133,13 @@ public:
   // approximate the derivatives by finite differences and not overwrite this
   // function, e.g. in ipopt.cc::use_jacobian_approximation_ = true
   // Attention: see the parent class function for important information on sparsity pattern.
-  void FillJacobianBlock (const std::string& var_set, Jacobian& jac_block) const override
+  void FillJacobianBlock (const Component::Ptr& var_set, Jacobian& jac_block) const override
   {
     // must fill only that submatrix of the overall Jacobian that relates
     // to this constraint and "var_set1". even if more constraints or variables
     // classes are added, this submatrix will always start at row 0 and column 0,
     // thereby being independent from the overall problem.
-    if (var_set == "var_set1") {
+    if (var_set->GetName() == "var_set1") {
       Vector2d x = GetVariables()->GetComponent("var_set1")->GetValues();
 
       jac_block.coeffRef(0, 0) = 2.0*x(0); // derivative of first constraint w.r.t x0
@@ -160,9 +160,9 @@ public:
     return -std::pow(x(1)-2,2);
   };
 
-  void FillJacobianBlock (const std::string& var_set, Jacobian& jac) const override
+  void FillJacobianBlock (const Component::Ptr& var_set, Jacobian& jac) const override
   {
-    if (var_set == "var_set1") {
+    if (var_set->GetName() == "var_set1") {
       Vector2d x = GetVariables()->GetComponent("var_set1")->GetValues();
 
       jac.coeffRef(0, 0) = 0.0;             // derivative of cost w.r.t x0

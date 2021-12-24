@@ -60,7 +60,7 @@ ConstraintSet::GetJacobian () const
     int n = vars->GetRows();
     jac.resize(GetRows(), n);
 
-    FillJacobianBlock(vars->GetName(), jac);
+    FillJacobianBlock(vars, jac);
     // reserve space for the new elements to reduce memory allocation
     triplet_list.reserve(triplet_list.size()+jac.nonZeros());
 
